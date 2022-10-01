@@ -2,7 +2,7 @@
   version: "v0.1"
   virtual_machine: false  # Is the system running in a vm?
   emulate_sdr: true       # Should the SDR be emulated (i.e. SDR not present)
-  emulate_arduino: false  # Should the arduino be emulated (i.e. arduino not present)
+  emulate_arduino: true  # Should the arduino be emulated (i.e. arduino not present)
   emulate_thermal: false  # Should the thermal system be emulated
   telemetry_freq: 0.20     # Hz (always keep to two decimal places e.g. #.##)
 
