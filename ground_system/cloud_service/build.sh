@@ -3,8 +3,8 @@
 echo "[cloud_service] Building..."
 # Copy in the latest protobuf messages 
 echo "[cloud_service] Copying dependencies"
-cp ../../common/message_pb2.py .
-cp ../../common/config_pb2.py .
+cp ../main_service/message_pb2.py .
+cp ../main_service/config_pb2.py .
 cp ../../common/BaseApp.py .
 cp ../../common/TCPClient.py .
 cp ../../common/TCPServer.py .
