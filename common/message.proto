@@ -19,9 +19,20 @@ message Message {
     optional bool request_config = 8;
 }
 
+
 //---------------------------------------------
-//          Command Messages Here
+//          WATERLILY Command Messages Here
 //---------------------------------------------
+
+message dockingClientReadyForFill {
+    optional bool is_ready = 1;
+}
+
+
+//---------------------------------------------
+//          INSECTS Command Messages Here
+//---------------------------------------------
+
 message Command {
     optional SetServoPosition set_servo_position = 1;
     optional SetFanSpeed set_fan_speed = 2;
