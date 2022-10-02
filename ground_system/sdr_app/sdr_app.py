@@ -7,7 +7,7 @@ import time
 import queue
 
 """
-Purpose: This app is used to connect the ground system to the vehicle via SDR or simulation
+Purpose: This app is used to connect the ground system to the client via SDR or simulation
 """
 
 class SDRApp(BaseApp):
@@ -23,16 +23,16 @@ class SDRApp(BaseApp):
         self.tcp_server.start()
 
     def run(self):
-        if len(self.command_queue) and "vehicle.sdr_app" in self.tcp_server.connections:
+        if len(self.command_queue) and "client.sdr_app" in self.tcp_server.connections:
             for msg in self.command_queue:
-                if "vehicle." in msg.destination or "all" == msg.destination:
+                if "client." in msg.destination or "all" == msg.destination:
                     if "ground.sdr_app" not in msg.sender:
-                        self.tcp_server.send(msg=msg, dst=msg.destination, client="vehicle.sdr_app")
-        if len(self.telemetry_queue) and "vehicle.sdr_app" in self.tcp_server.connections:
+                        self.tcp_server.send(msg=msg, dst=msg.destination, client="client.sdr_app")
+        if len(self.telemetry_queue) and "client.sdr_app" in self.tcp_server.connections:
             for msg in self.telemetry_queue:
-                if "vehicle." in msg.destination or "all" == msg.destination:
+                if "client." in msg.destination or "all" == msg.destination:
                     if "ground.sdr_app" not in msg.sender:
-                        self.tcp_server.send(msg=msg, dst=msg.destination, client="vehicle.sdr_app")
+                        self.tcp_server.send(msg=msg, dst=msg.destination, client="client.sdr_app")
         if not self.tcp_server.message_queue.empty():
             msg = self.tcp_server.message_queue.get()
             if msg.HasField("command"):

@@ -1,10 +1,12 @@
-# MicroSpace
-MicroSpace is an open source framework for developing microservice satellites and ground systems
+# MicroSpace2.0
+MicroSpace2.0 is an open source framework built of off Microspace, developed by the InSECTS team at Johns Hopkins University, Andrew, Julia, Hunter, and Ryan
 
-Developed by the InSECTS team at Johns Hopkins University, Andrew, Julia, Hunter, and Ryan
+Microspace 2.0 was developed by the Water Lily Team at Johns Hopkins University: Laura, Antoine, Coleton, Christina 
 
 # Overview
-The repository here contains three main components, a ground system, a satellite system, and common libraries used by both. Both the ground system and the satellite system are developed to be cloud native in a microservice approach. Within the architecture, every software application deployed and running is containerized and managed by K3S Rancher. Each containerized application is known as either a service or an app, where services are necessary to running the digital ecosystem, and apps are user developed containerized software applications. Both apps and services are built, deployed, and managed the same.
+
+
+The repository here contains four main components, a ground system, a client system, a depot system, and common libraries used by all. The ground, client and depot systems are developed to be cloud native in a microservice approach. Within the architecture, every software application deployed and running is containerized and managed by K3S Rancher. Each containerized application is known as either a service or an app, where services are necessary to running the digital ecosystem, and apps are user developed containerized software applications. Both apps and services are built, deployed, and managed the same.
 
 
 # Setup

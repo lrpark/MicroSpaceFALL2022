@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: avionics
+  labels:
+    app: depot
+spec:
+  containers:
+    - name: main-service
+      image: depot.main_service
