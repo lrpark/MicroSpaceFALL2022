@@ -101,15 +101,15 @@ class UDPClient():
         return None
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # runs for testing only and by running UDPClient.py directly (i.e, >> python UDPClient.py)
     print("[UDP Client] starting up...")
     client = UDPClient(id="UDPClientTest")
-    client.add_listener(group="224.1.1.1", port=5050)
+    client.add_listener(group="224.1.1.11", port=5050) # arbitrary address to test, ensure other UDP client uses same address so they talk to each other
     time.sleep(2)
-    client.add_sender(group="224.1.1.1", port=5050)
+    client.add_sender(group="224.1.1.11", port=5050)
     msg = proto.Message()
-    client.send(msg, group="224.1.1.1", port=5050)
+    client.send(msg, group="224.1.1.11", port=5050)
     while True:
-        messages = client.get_messages(group="224.1.1.1", port=5050)
+        messages = client.get_messages(group="224.1.1.11", port=5050)
         for msg in messages:
             print(f"Message: {msg}")

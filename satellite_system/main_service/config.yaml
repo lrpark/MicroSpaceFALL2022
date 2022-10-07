@@ -12,7 +12,7 @@
   telemetry_multicast_port: 5060
 
   # ---- sdr_app ----
-  sdr_tcp_client_ip: "127.0.0.1"
+  sdr_tcp_client_ip: "192.168.1.160" # modify to match the IP address of Ground System
   sdr_tcp_client_port: 5005
 
   # ---- hal_service ----
