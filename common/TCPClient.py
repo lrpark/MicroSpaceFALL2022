@@ -24,7 +24,7 @@ class TCPClient():
 
     def connect(self) -> None:
         try:
-            self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM
+            self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.client.connect(self.address) 
             msg = message_pb2.Message()
             self.send(msg)  # Allows the server to store the name of this client
