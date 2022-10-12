@@ -30,7 +30,7 @@ class BaseApp():
         self.command_queue = []
         self.telemetry_queue = []
 
-        self.__startup_group = "224.1.1.90"
+        self.__startup_group = "224.1.1.92" # "224.1.1.90" Ensure system and each message queue have unqiue addresses if running all virtual
         self.__startup_port = 5090
         self.__command_group = None
         self.__command_port = None

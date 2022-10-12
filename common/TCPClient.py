@@ -25,7 +25,7 @@ class TCPClient():
     def connect(self) -> None:
         try:
             self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.client.connect(self.address)
+            self.client.connect(self.address) 
             msg = message_pb2.Message()
             self.send(msg)  # Allows the server to store the name of this client
             thread = threading.Thread(target=self.__receive)
@@ -70,10 +70,10 @@ class TCPClient():
             buf.append(self.message_queue.get())
         return buf
 
-
-if __name__ == "__main__":
-    client = TCPClient(ip="127.0.0.1", port=5051, sender="autonomy")
-    client.start()
+# Under construction - doesn't seem to work
+if __name__ == "__main__": # runs for testing only and by running TCPClient.py directly (i.e, >> pythonTCPClient.py)
+    client = TCPClient(ip="192.168.1.160", port=5051, sender="autonomy") # Use IP address and port of the TCPServer (on Ground System)
+    client.connect()
     msg = message_pb2.Message()
     client.send(msg=msg, dst="hal")
     while client.active:
