@@ -22,6 +22,7 @@ class HalService(BaseApp):
     def __init__(self) -> None:
         self.arduino = None
         self.sent_configs = None
+        self.start = None
         super().__init__(id="vehicle.hal_service")
 
     def _send_to_arduino(self):
@@ -36,6 +37,7 @@ class HalService(BaseApp):
         config = self.config_params
         self.arduino = Arduino(port=config.arduino_address, baudrate=config.serial_baudrate)
         self.sent_configs = False
+        self.start = time.time()
 
     def run(self):
         # Send the config parameters once
@@ -54,6 +56,15 @@ class HalService(BaseApp):
             msg = self.arduino.messages.pop()
             print(msg)
             self.send_telemetry(msg)
+        if (time.time() - self.start) > 2:
+            message = proto.Message()
+            telemetry = proto.Telemetry()
+            propFillLevel = proto.PropFillLevel()
+            propFillLevel.level = 4.0
+            telemetry.level.CopyFrom(propFillLevel)
+            message.telemetry.CopyFrom(telemetry)
+            self.send_telemetry(message)
+            self.start = time.time()
 
     def shutdown(self):
         pass
@@ -61,9 +72,12 @@ class HalService(BaseApp):
 
 if __name__ == "__main__":
     HalService()
-    ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
-    ser.reset_input_buffer()
-    while True:
-        if ser.in_waiting > 0:
-            line = ser.readline().decode('utf-8').rstrip()
-            print(line)
+    # ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+    # ser.reset_input_buffer()
+    # while True:
+    #     if ser.in_waiting > 0:
+    #         ser.write(b"Hello from Raspberry Pi!\n")
+    #         line = ser.readline().decode('utf-8').rstrip()
+    #         print(line)
+    #         time.sleep(1)
+            

@@ -27,6 +27,9 @@ message Message {
 message dockingClientReadyForFill {
     optional bool is_ready = 1;
 }
+message PropFillLevel {
+    optional double level = 1;
+}
 
 
 //---------------------------------------------
@@ -62,6 +65,7 @@ message SetAutonomyState {
 message Telemetry {
     optional TemperatureData temperature_data = 1;
     optional FanSpeedData fan_speed_reading = 2;
+    optional PropFillLevel level = 3;
 }
 
 message TemperatureData {
