@@ -32,16 +32,11 @@ class Arduino():
         msg = proto.Message()
         tlm = proto.Telemetry()
 
-        # line = serial.readline().decode('utf-8').rstrip()
-        # print(line)
-        # print('Hello this is a test')
-
-
-        # if serial[0] == '0':  # Temperature reading
-        #     data = proto.TemperatureData()
-        #     data.sensor_id = int(serial[1])
-        #     data.sensor_value = float(serial[2])
-        #     tlm.temperature_data.CopyFrom(data)
+        if serial[0] == '0':  # Temperature reading
+            data = proto.TemperatureData()
+            data.sensor_id = int(serial[1])
+            data.sensor_value = float(serial[2])
+            tlm.temperature_data.CopyFrom(data)
         # if serial[1] == '1':
         #     pass
         msg.telemetry.CopyFrom(tlm)
