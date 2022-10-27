@@ -63,5 +63,6 @@ class Arduino():
         while True:
             while self.conn.in_waiting:
                 serial_buf = self.conn.readline().decode('utf-8').rstrip()
+                print(serial_buf)
                 msg = self.translate_serial_to_proto(serial_buf)
                 self.messages.append(msg)
