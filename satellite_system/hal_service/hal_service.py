@@ -51,7 +51,7 @@ class HalService(BaseApp):
         if len(self.command_queue):
             self.arduino.send_msg(self.command_queue.pop())
         
-        # Ready any messages from arduino
+        # Read any messages from arduino
         if len(self.arduino.messages):
             msg = self.arduino.messages.pop()
             print(msg)
