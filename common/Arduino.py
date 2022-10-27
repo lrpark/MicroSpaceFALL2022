@@ -34,6 +34,7 @@ class Arduino():
 
         line = serial.readline().decode('utf-8').rstrip()
         print(line)
+        print('Hello this is a test')
 
 
         # if serial[0] == '0':  # Temperature reading
