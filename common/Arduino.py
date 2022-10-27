@@ -36,8 +36,8 @@ class Arduino():
             data.sensor_id = int(serial[1])
             data.sensor_value = float(serial[2])
             tlm.temperature_data.CopyFrom(data)
-        if serial[1] == '1':
-            pass
+        # if serial[1] == '1':
+        #     pass
         msg.telemetry.CopyFrom(tlm)
 
         return msg
