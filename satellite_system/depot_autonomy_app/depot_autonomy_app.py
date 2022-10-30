@@ -13,6 +13,7 @@ class DepotAutonomyApp (BaseApp):
         self.fanspeed = 1   # 0 is off 1 is 25% 2 is 50% 3 is 75% 4 is 100%
         self.manual_mode = None
         self.temp_data = dict()
+        self.prop_data = dict()
         super().__init__("vehicle.autonomy_app")
         
     def read_tempSensors(self):
@@ -28,6 +29,14 @@ class DepotAutonomyApp (BaseApp):
                         self.temp_data[sensor_id].append(msg.telemetry.temperature_data.sensor_value)
                     else:
                         self.temp_data[sensor_id].append(msg.telemetry.temperature_data.sensor_value)
+
+
+    def read_propMass(self):
+        for msg in self.telemetry_queue:
+            if msg.HasField("telemetry"):
+                if msg.telemetry.HasField("prop_depot_tank_prop_mass"):
+                    prop_mass = msg.telemetry.prop_depot_tank_prop_mass.prop_mass
+                    print(prop_mass)
         
     def send_fanspeed_and_baffle(self):
         msg = proto.Message()
@@ -57,6 +66,7 @@ class DepotAutonomyApp (BaseApp):
         if len(self.command_queue):
             pass
         if len(self.telemetry_queue):
+            self.read_propMass()
             self.read_tempSensors()
         if not self.manual_mode:
             alltemps = []
