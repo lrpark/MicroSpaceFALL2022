@@ -4,7 +4,7 @@ FROM python:3.7
 WORKDIR /usr/src/app
 
 # add the python application
-ADD client_autonomy_app.py .
+ADD depot_autonomy_app.py .
 ADD message_pb2.py .
 ADD TCPClient.py .
 ADD UDPClient.py .
@@ -16,4 +16,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-ENTRYPOINT ["python", "./client_autonomy_app.py"]
+ENTRYPOINT ["python", "./depot_autonomy_app.py"]

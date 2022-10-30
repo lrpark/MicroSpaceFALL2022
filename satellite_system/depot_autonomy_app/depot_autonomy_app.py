@@ -36,6 +36,7 @@ class DepotAutonomyApp (BaseApp):
             if msg.HasField("telemetry"):
                 if msg.telemetry.HasField("prop_depot_tank_prop_mass"):
                     prop_mass = msg.telemetry.prop_depot_tank_prop_mass.prop_mass
+                    prop_mass = prop_mass + 1.1111
                     print(prop_mass)
         
     def send_fanspeed_and_baffle(self):
