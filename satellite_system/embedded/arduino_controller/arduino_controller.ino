@@ -142,6 +142,7 @@ void refreshTelemetryData(){
 double updateTempData()
 {
   for(int i = 0; i < num_temp_sensors; i++){
+
     temps[i] = analogRead(temp_sensors[i])*(5000/1024.0);  // Averaging filter
     temps[i] = (temps[i]-110)/10;     // 110 is magic offset for TMP35
     prev_temps[i] = temps[i];
