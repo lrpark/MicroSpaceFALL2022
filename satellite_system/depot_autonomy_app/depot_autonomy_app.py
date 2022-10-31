@@ -35,7 +35,7 @@ class DepotAutonomyApp (BaseApp):
         for msg in self.telemetry_queue:
             if msg.HasField("telemetry"):
                 if msg.telemetry.HasField("depot_prop_mass"):
-                    depot_prop_mass = msg.telemetry.prop_depot_tank_prop_mass.prop_mass
+                    depot_prop_mass = msg.telemetry.depot_prop_mass.depot_prop_mass
                     depot_prop_mass = depot_prop_mass + 1.1111
                     print(depot_prop_mass)
         
