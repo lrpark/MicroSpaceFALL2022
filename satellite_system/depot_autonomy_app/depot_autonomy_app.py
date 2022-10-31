@@ -34,10 +34,10 @@ class DepotAutonomyApp (BaseApp):
     def read_propMass(self):
         for msg in self.telemetry_queue:
             if msg.HasField("telemetry"):
-                if msg.telemetry.HasField("prop_depot_tank_prop_mass"):
-                    prop_mass = msg.telemetry.prop_depot_tank_prop_mass.prop_mass
-                    prop_mass = prop_mass + 1.1111
-                    print(prop_mass)
+                if msg.telemetry.HasField("depot_prop_mass"):
+                    depot_prop_mass = msg.telemetry.prop_depot_tank_prop_mass.prop_mass
+                    depot_prop_mass = depot_prop_mass + 1.1111
+                    print(depot_prop_mass)
         
     def send_fanspeed_and_baffle(self):
         msg = proto.Message()

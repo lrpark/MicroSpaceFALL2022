@@ -56,7 +56,7 @@ message DepotClientSeparate {
 //          WATERLILY Telemetry Messages Here
 //---------------------------------------------
 message PropDepotTankPropMass {
-    optional double prop_mass = 1;
+    optional double depot_prop_mass = 1;
 }
 message PropClientTankPropMass {
     optional double prop_mass = 1;
@@ -131,7 +131,7 @@ message Telemetry {
     optional TemperatureData temperature_data = 1;
     optional FanSpeedData fan_speed_reading = 2;
     optional PropFillLevel level = 3;
-    optional PropDepotTankPropMass prop_depot_tank_prop_mass = 4;
+    optional PropDepotTankPropMass depot_prop_mass = 4;
    
 }
 
