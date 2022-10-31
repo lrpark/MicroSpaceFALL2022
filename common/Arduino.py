@@ -32,13 +32,26 @@ class Arduino():
         msg = proto.Message()
         tlm = proto.Telemetry()
 
-        if serial[0] == '0':  # Temperature reading
-            data = proto.TemperatureData()
-            data.sensor_id = int(serial[1])
-            data.sensor_value = float(serial[2])
-            tlm.temperature_data.CopyFrom(data)
-        # if serial[1] == '1':
-        #     pass
+        # if serial[0] == '0':  # Temperature reading
+        #     data = proto.TemperatureData()
+        #     data.sensor_id = int(serial[1])
+        #     data.sensor_value = float(serial[2])
+        #     tlm.temperature_data.CopyFrom(data)
+        if serial[0] == '1':  # Client Magnetometer
+            data = proto.GncClientMagnetic()
+            data.x = int(serial[1])
+            data.y = float(serial[2])
+            data.z = float(serial[3])
+            tlm.gnc_client_magnetic.CopyFrom(data)
+        if serial[0] == '2':  # Depot Magnetometer
+            data = proto.GncDepotMagnetic()
+            data.x = int(serial[1])
+            data.y = float(serial[2])
+            data.z = float(serial[3])
+            tlm.gnc_depot_magnetic.CopyFrom(data)
+
+
+
         msg.telemetry.CopyFrom(tlm)
 
         return msg

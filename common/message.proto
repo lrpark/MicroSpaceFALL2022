@@ -70,10 +70,12 @@ message PropDepotFillValveIsOpen {
 message GncDepotMagnetic {
     optional double x = 1;
     optional double y = 2;
+    optional double z = 3;
 }
 message GncClientMagnetic {
     optional double x = 1;
     optional double y = 2;
+    optional double z = 3;
 }
 message GncClientRotationCommand {
     optional int32 command = 1;
@@ -132,6 +134,8 @@ message Telemetry {
     optional FanSpeedData fan_speed_reading = 2;
     optional PropFillLevel level = 3;
     optional PropDepotTankPropMass depot_prop_mass = 4;
+    optional GncClientMagnetic gnc_client_magnetic = 5;
+    optional GncDepotMagnetic gnc_depot_magnetic = 6;
    
 }
 
