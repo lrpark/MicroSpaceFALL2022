@@ -77,6 +77,9 @@ void sendMeasurementsToPi() {
 
   //////////// PROPULSION SUBSYSTEM ////////////////
 
+  // 11 = client scale mass
+  // 12 = depot scale mass
+
 
 
 
