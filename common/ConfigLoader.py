@@ -24,6 +24,8 @@ class ConfigLoader():
 
 if __name__=="__main__":
     config_fp = "/home/jhu-ep/InSECTS-Vehicle-Testbed/main_service/config.yaml"
+    config_fp = "/home/antoine/workspace/MicroSpaceFALL2022/satellite_system/main_service/config.yaml"
+
     cl = ConfigLoader(config_path=config_fp)
     data = cl.read_config()
     print(data)

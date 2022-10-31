@@ -126,9 +126,7 @@ message Telemetry {
 
     optional TemperatureData temperature_data = 1;
     optional FanSpeedData fan_speed_reading = 2;
-
     optional PropFillLevel level = 3;
-
     optional PropDepotTankPropMass prop_depot_tank_prop_mass = 4;
    
 }

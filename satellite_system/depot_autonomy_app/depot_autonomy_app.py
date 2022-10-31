@@ -14,7 +14,7 @@ class DepotAutonomyApp (BaseApp):
         self.manual_mode = None
         self.temp_data = dict()
         self.prop_data = dict()
-        super().__init__("vehicle.autonomy_app")
+        super().__init__("vehicle.depot_autonomy_app")
         
     def read_tempSensors(self):
         for msg in self.telemetry_queue:

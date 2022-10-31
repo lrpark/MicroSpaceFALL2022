@@ -66,6 +66,15 @@ class HalService(BaseApp):
             self.send_telemetry(message)
             self.start = time.time()
 
+
+
+            message = proto.Message()
+            telemetry = proto.Telemetry()
+            propMass = proto.PropDepotTankPropMass()
+            propMass.prop_depot_tank_prop_mass = 4.0
+            telemetry.level.CopyFrom(propFillLevel)
+            message.telemetry.CopyFrom(telemetry)
+
     def shutdown(self):
         pass
 

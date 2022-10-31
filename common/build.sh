@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# DO NOT NEED TO BUILD 
+
 set -e
 set -o pipefail
 
