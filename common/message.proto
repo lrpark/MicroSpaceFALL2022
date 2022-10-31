@@ -44,6 +44,7 @@ message ClientDepotReadyForMate {
 }
 message PropFillLevel {
     optional double level = 1;
+}
 message depotClientReadyForMate {
     optional bool is_ready = 1;
 }
@@ -58,6 +59,9 @@ message PropDepotTankPropMass {
     optional double prop_mass = 1;
 }
 message PropClientTankPropMass {
+    optional double prop_mass = 1;
+}
+message PropClientTankPropMass2Test {
     optional double prop_mass = 1;
 }
 message PropDepotFillValveIsOpen {
