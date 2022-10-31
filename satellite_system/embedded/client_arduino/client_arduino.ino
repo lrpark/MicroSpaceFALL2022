@@ -2,9 +2,6 @@ String serial_in;
 
 // Global temp variables
 
-double client_mag_meas[] = {0.0, 0.0, 0.0};       
-double depot_mag_meas[] = {0.0, 0.0, 0.0};     
-
 void setup() {
   Serial.begin(115200);
 }
@@ -58,17 +55,21 @@ void sendMeasurementsToPi() {
   // 1 = client magnetometer
   // 2 = depot magnetometer
 
-  client_mag_meas = {0.03, 0.05, 0.07};
-  for(int i = 0; i < 2; i++){
-    String serial_data = "1," + String(i) + "," + String(client_mag_meas[i], 3);
-    Serial.println(serial_data);
-  }
+  double client_mag_meas_X = 0.02;
+  double client_mag_meas_Y = 0.04;
+  double client_mag_meas_Z = 0.06;
+  
+  String serial_data = "1," + String(client_mag_meas_X) + "," + String(client_mag_meas_Y) + "," + String(client_mag_meas_Z);
+  Serial.println(serial_data);
+  
+  
+  double depot_mag_meas_X = 0.03;
+  double depot_mag_meas_Y = 0.05;
+  double depot_mag_meas_Z = 0.07;
 
-  depot_mag_meas = {0.02, 0.04, 0.06};
-  for(int i = 0; i < 2; i++){
-    String serial_data = "2," + String(i) + "," + String(depot_mag_meas[i], 3);
-    Serial.println(serial_data);
-  }
+  serial_data = "1," + String(depot_mag_meas_X) + "," + String(depot_mag_meas_X) + "," + String(depot_mag_meas_X);
+  Serial.println(serial_data);
+  
 
 
 
