@@ -17,5 +17,5 @@
   # ---- cloud_service ----
   connect_to_command_database: true  # Setting this to false enables local testing
   command_database_name: "Ground_to_Spacecraft_Temporary_Queue"
-  connect_to_telemetry_database: false  # Setting this to false enables local testing
+  connect_to_telemetry_database: true  # Setting this to false enables local testing
   telemetry_database_name: "Spacecraft_Telemetry_to_Ground"

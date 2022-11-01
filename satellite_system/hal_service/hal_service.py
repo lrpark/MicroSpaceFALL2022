@@ -7,6 +7,7 @@ import message_pb2 as proto
 import queue
 import serial
 import time
+import sys
 
 """
 Purpose: This app is supposed to expose/emulate much of the hardware functions to the applications running
@@ -22,6 +23,7 @@ class HalService(BaseApp):
     def __init__(self) -> None:
         self.arduino = None
         self.sent_configs = None
+        self.start = None
         super().__init__(id="vehicle.hal_service")
 
     def _send_to_arduino(self):
@@ -36,6 +38,7 @@ class HalService(BaseApp):
         config = self.config_params
         self.arduino = Arduino(port=config.arduino_address, baudrate=config.serial_baudrate)
         self.sent_configs = False
+        self.start = time.time()
 
     def run(self):
         # Send the config parameters once
@@ -49,11 +52,36 @@ class HalService(BaseApp):
         if len(self.command_queue):
             self.arduino.send_msg(self.command_queue.pop())
         
-        # Ready any messages from arduino
+        # Read any messages from arduino
         if len(self.arduino.messages):
             msg = self.arduino.messages.pop()
             print(msg)
             self.send_telemetry(msg)
+
+        # Demo - send dummy prop mass telemetry
+        if len(sys.argv) > 1:
+            if (sys.argv[1]) == '-demoClient':
+                if (time.time() - self.start) > 2:
+                    message = proto.Message()
+                    telemetry = proto.Telemetry()
+                    propClientTankPropMass = proto.propClientTankPropMass()
+                    propClientTankPropMass.client_prop_mass = 4
+                    telemetry.client_prop_mass.CopyFrom(propClientTankPropMass)
+                    message.telemetry.CopyFrom(telemetry)
+                    self.send_telemetry(message)
+                    self.start = time.time()
+
+        if len(sys.argv) > 1:
+            if (sys.argv[1]) == '-demoDepot':
+                if (time.time() - self.start) > 2:
+                    message = proto.Message()
+                    telemetry = proto.Telemetry()
+                    propDepotTankPropMass = proto.propDepotTankPropMass()
+                    propDepotTankPropMass.depot_prop_mass = 4
+                    telemetry.depot_prop_mass.CopyFrom(propDepotTankPropMass)
+                    message.telemetry.CopyFrom(telemetry)
+                    self.send_telemetry(message)
+                    self.start = time.time()
 
     def shutdown(self):
         pass
@@ -61,3 +89,12 @@ class HalService(BaseApp):
 
 if __name__ == "__main__":
     HalService()
+    # ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+    # ser.reset_input_buffer()
+    # while True:
+    #     if ser.in_waiting > 0:
+    #         ser.write(b"Hello from Raspberry Pi!\n")
+    #         line = ser.readline().decode('utf-8').rstrip()
+    #         print(line)
+    #         time.sleep(1)
+            
