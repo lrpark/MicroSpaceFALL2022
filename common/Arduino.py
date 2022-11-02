@@ -39,18 +39,16 @@ class Arduino():
         #     tlm.temperature_data.CopyFrom(data)
         if serial[0] == '1':  # Client Magnetometer
             data = proto.GncClientMagnetic()
-            data.x = int(serial[1])
+            data.x = float(serial[1])
             data.y = float(serial[2])
             data.z = float(serial[3])
             tlm.gnc_client_magnetic.CopyFrom(data)
         if serial[0] == '2':  # Depot Magnetometer
             data = proto.GncDepotMagnetic()
-            data.x = int(serial[1])
+            data.x = float(serial[1])
             data.y = float(serial[2])
             data.z = float(serial[3])
             tlm.gnc_depot_magnetic.CopyFrom(data)
-
-
 
         msg.telemetry.CopyFrom(tlm)
 
