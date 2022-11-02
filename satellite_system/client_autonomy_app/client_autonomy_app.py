@@ -21,7 +21,16 @@ class ClientAutonomyApp (BaseApp):
                     depot_prop_mass = depot_prop_mass + 1.1111
                     print(depot_prop_mass)
         
-    
+    def setup(self) -> None:
+        self.manual_mode = False
+        print("Client Autonomy System Online")
+
+    def run(self) -> None:
+        # Read commands and telem
+        if len(self.command_queue):
+            pass
+        if len(self.telemetry_queue):
+            self.read_propMass()
 
 if __name__ == "__main__":
     a= ClientAutonomyApp()

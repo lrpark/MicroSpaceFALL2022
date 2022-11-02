@@ -10,6 +10,7 @@ import statistics
 class DepotAutonomyApp (BaseApp):
     def __init__(self) -> None:
         self.prop_data = dict()
+        self.manual_mode = None
         super().__init__("vehicle.depot_autonomy_app")
         
 
@@ -22,6 +23,16 @@ class DepotAutonomyApp (BaseApp):
                     print(depot_prop_mass)
         
     
+    def setup(self) -> None:
+        self.manual_mode = False
+        print("Depot Autonomy System Online")
+
+    def run(self) -> None:
+        # Read commands and telem
+        if len(self.command_queue):
+            pass
+        if len(self.telemetry_queue):
+            self.read_propMass()
 
 if __name__ == "__main__":
     a= DepotAutonomyApp()
