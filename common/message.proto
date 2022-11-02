@@ -60,6 +60,7 @@ message groundClientEmergencyOff {
     optional bool emergency = 1;
 }
 
+
 //---------------------------------------------
 //          WATERLILY Telemetry Messages Here
 //---------------------------------------------
