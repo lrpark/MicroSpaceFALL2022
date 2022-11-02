@@ -62,12 +62,12 @@ void sendMeasurementsToPi() {
   String serial_data = "1," + String(client_mag_meas_X) + "," + String(client_mag_meas_Y) + "," + String(client_mag_meas_Z);
   Serial.println(serial_data);
   
-  
+
   double depot_mag_meas_X = 0.03;
   double depot_mag_meas_Y = 0.05;
   double depot_mag_meas_Z = 0.07;
 
-  serial_data = "1," + String(depot_mag_meas_X) + "," + String(depot_mag_meas_X) + "," + String(depot_mag_meas_X);
+  serial_data = "2," + String(depot_mag_meas_X) + "," + String(depot_mag_meas_X) + "," + String(depot_mag_meas_X);
   Serial.println(serial_data);
   
 
