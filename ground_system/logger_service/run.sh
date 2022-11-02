@@ -1,2 +1,2 @@
 #!/bin/bash
-docker run --network=host ground.logger_service
+docker run -it --network=host ground.logger_service

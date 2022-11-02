@@ -28,14 +28,16 @@ class CloudService(BaseApp):
         )
         return response
 
-    def put(self, Downlink_Msg_ID='' , Sensor_Id='' , Temperature='' , Date='' , Time=''):
+    #def put(self, Downlink_Msg_ID='' , Sensor_Id='' , Temperature='' , Date='' , Time=''):
+    def put(self, Downlink_Msg_ID='' , Sensor_Id='' , client_prop_mass='' , depot_prop_mass='' , Date='' , Time=''):
         global counter_downlink_id
 
         self.telem_table.put_item(
             Item={
                 'Downlink_Msg_ID':counter_downlink_id,
                 'Sensor_Id':Sensor_Id,
-                'Temperature':Temperature,
+                'client_prop_mass':client_prop_mass,
+                'depot_prop_mass':depot_prop_mass,
                 'Date' :Date,
                 'Time' :Time
             }
@@ -57,15 +59,18 @@ class CloudService(BaseApp):
     def push_to_cloud(self, msg: proto.Message):
         global counter_downlink_id
 
-        id = msg.telemetry.temperature_data.sensor_id
-        temp = msg.telemetry.temperature_data.sensor_value
+        #id = msg.telemetry.temperature_data.sensor_id
+        #temp = msg.telemetry.temperature_data.sensor_value
+        #id = msg.telemetry.client_prop_mass.sensor_id
+        cmass = msg.telemetry.client_prop_mass.client_prop_mass
+        dmass = msg.telemetry.depot_prop_mass.depot_prop_mass
         now = datetime.datetime.now()
         date=now.strftime('%Y-%m-%d')
         ctime=now.strftime('%H:%M:%S %Z')
         if self.config_params.connect_to_telemetry_database:
-            self.put(Downlink_Msg_ID=str(counter_downlink_id), Sensor_Id=str(id), Temperature=str(temp), Date=str(date), Time=str(ctime))
+            self.put(Downlink_Msg_ID=str(counter_downlink_id), Sensor_Id=str(id), client_prop_mass=str(cmass), depot_prop_mass=str(dmass), Date=str(date), Time=str(ctime))
         counter_downlink_id = counter_downlink_id + 1
-        print(f"Uploaded Sample on Cloud Id:{id} T:{temp} D:{date} T:{ctime}")
+        print(f"Uploaded Sample on Cloud Id:{id} ClientPropMass:{cmass} DepotPropMass:{dmass} D:{date} T:{ctime}")
 
     def setup(self):
         if self.config_params.connect_to_command_database:
