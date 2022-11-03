@@ -29,7 +29,7 @@ class CloudService(BaseApp):
         return response
 
     #def put(self, Downlink_Msg_ID='' , Sensor_Id='' , Temperature='' , Date='' , Time=''):
-    def put(self, Downlink_Msg_ID='' , Sensor_Id='' , client_prop_mass='' , depot_prop_mass='' , Date='' , Time=''):
+    def put(self, Downlink_Msg_ID='' , Sensor_Id='' , client_prop_mass='' , depot_prop_mass='' , EpochTime='', Date='' , Time=''):
         global counter_downlink_id
 
         self.telem_table.put_item(
@@ -39,7 +39,8 @@ class CloudService(BaseApp):
                 'client_prop_mass':client_prop_mass,
                 'depot_prop_mass':depot_prop_mass,
                 'Date' :Date,
-                'Time' :Time
+                'Time' :Time,
+                'EpochTime' :EpochTime
             }
         )
 
@@ -67,10 +68,11 @@ class CloudService(BaseApp):
         now = datetime.datetime.now()
         date=now.strftime('%Y-%m-%d')
         ctime=now.strftime('%H:%M:%S %Z')
+        etime = int(time.time()) # using epoch time to sort telemetry in web app, this replaces the date and time columns
         if self.config_params.connect_to_telemetry_database:
-            self.put(Downlink_Msg_ID=str(counter_downlink_id), Sensor_Id=str(id), client_prop_mass=str(cmass), depot_prop_mass=str(dmass), Date=str(date), Time=str(ctime))
+            self.put(Downlink_Msg_ID=str(counter_downlink_id), Sensor_Id=str(id), client_prop_mass=str(cmass), depot_prop_mass=str(dmass), EpochTime=str(etime), Date=str(date), Time=str(ctime))
         counter_downlink_id = counter_downlink_id + 1
-        print(f"Uploaded Sample on Cloud Id:{id} ClientPropMass:{cmass} DepotPropMass:{dmass} D:{date} T:{ctime}")
+        print(f"Uploaded Sample on Cloud Id:{id} ClientPropMass:{cmass} DepotPropMass:{dmass} EpochTime:{etime} D:{date} T:{ctime}")
 
     def setup(self):
         if self.config_params.connect_to_command_database:
