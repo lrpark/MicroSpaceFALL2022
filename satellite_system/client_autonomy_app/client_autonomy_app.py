@@ -25,7 +25,7 @@ class ClientAutonomyApp (BaseApp):
         msg = proto.Message()                                
         cmd = proto.Command()                                  
         step_command= proto.ClientStepperCommand()                  
-        step_command.pos_deg = 0.54321                   
+        step_command.pos_deg = 250.0                 
         cmd.set_stepper_command.CopyFrom(step_command)            
         msg.command.CopyFrom(cmd)                             
         self.send_command(msg)                                                                
