@@ -23,7 +23,6 @@ class Arduino():
             #     return f"3,{int(msg.command.set_fan_state.fan_state)}"
 
             if msg.command.HasField("set_stepper_command"):
-                print('got to command has field stepper')
                 return f"1,{msg.command.set_stepper_command.pos_deg},\n"
 
         if msg.HasField("telemetry"):
@@ -78,6 +77,7 @@ class Arduino():
     def send_msg(self, msg: proto.Message) -> None:
         buf = self.translate_proto_to_serial(msg)
         if buf is not None:
+            print('We wrote bits to sent arduino')
             self.conn.write(bytes(buf, 'utf-8'))
 
     def __receive(self):
