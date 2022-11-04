@@ -15,12 +15,16 @@ class Arduino():
         # All serial commands are csv format (cmd type, val1, val2..., val n)
         # This function needs to be carefully maintained until a better method is implemented
         if msg.HasField("command"):     # TODO: make this capable of handling multi-commands
-            if msg.command.HasField("set_servo_position"):
-                return f"1,{msg.command.set_servo_position.servo_pos}"
-            if msg.command.HasField("set_fan_speed"):
-                return f"2,{msg.command.set_fan_speed.fan_speed}"
-            if msg.command.HasField("set_fan_state"):
-                return f"3,{int(msg.command.set_fan_state.fan_state)}"
+            # if msg.command.HasField("set_servo_position"):
+            #     return f"1,{msg.command.set_servo_position.servo_pos}"
+            # if msg.command.HasField("set_fan_speed"):
+            #     return f"2,{msg.command.set_fan_speed.fan_speed}"
+            # if msg.command.HasField("set_fan_state"):
+            #     return f"3,{int(msg.command.set_fan_state.fan_state)}"
+
+            if msg.command.HasField("set_stepper_command"):
+                return f"1,{msg.command.set_stepper_command.pos_deg},\n"
+
         if msg.HasField("telemetry"):
             pass
         if msg.HasField("config_params"):
@@ -73,6 +77,7 @@ class Arduino():
     def send_msg(self, msg: proto.Message) -> None:
         buf = self.translate_proto_to_serial(msg)
         if buf is not None:
+            print('We wrote bits to sent arduino')
             self.conn.write(bytes(buf, 'utf-8'))
 
     def __receive(self):

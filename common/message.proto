@@ -51,6 +51,9 @@ message depotClientReadyForMate {
 message DepotClientSeparate {
     optional bool is_separate = 1;
 }
+message ClientStepperCommand {
+    optional double pos_deg = 1;
+}
 
 //---------------------------------------------
 //          WATERLILY Telemetry Messages Here
@@ -107,6 +110,12 @@ message Command {
     optional SetFanSpeed set_fan_speed = 2;
     optional SetFanState set_fan_state = 3;
     optional SetAutonomyState set_autonomy_state = 4;
+    
+    // WATERLILY
+    optional ClientStepperCommand set_stepper_command = 5;
+
+
+
 }
 
 message SetServoPosition {
@@ -137,8 +146,9 @@ message Telemetry {
     optional PropDepotTankPropMass depot_prop_mass = 5;
     optional GncClientMagnetic gnc_client_magnetic = 6;
     optional GncDepotMagnetic gnc_depot_magnetic = 7;
-   
+
 }
+
 
 message TemperatureData {
     optional int32 sensor_id = 1;

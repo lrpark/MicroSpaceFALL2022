@@ -56,6 +56,7 @@ class HalService(BaseApp):
             msg = self.arduino.messages.pop()
             print(msg)
             self.send_telemetry(msg)
+        
         if (time.time() - self.start) > 2:
             message = proto.Message()
             telemetry = proto.Telemetry()
@@ -65,7 +66,6 @@ class HalService(BaseApp):
             message.telemetry.CopyFrom(telemetry)
             self.send_telemetry(message)
             self.start = time.time()
-
 
 
             message = proto.Message()

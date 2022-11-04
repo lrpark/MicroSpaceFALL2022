@@ -20,6 +20,16 @@ class ClientAutonomyApp (BaseApp):
                     depot_prop_mass = msg.telemetry.depot_prop_mass.depot_prop_mass
                     depot_prop_mass = depot_prop_mass + 1.1111
                     print(depot_prop_mass)
+    
+    def send_stepper_command(self):                            
+        msg = proto.Message()                                
+        cmd = proto.Command()                                  
+        step_command= proto.ClientStepperCommand()                  
+        step_command.pos_deg = 250.0                 
+        cmd.set_stepper_command.CopyFrom(step_command)            
+        msg.command.CopyFrom(cmd)                             
+        self.send_command(msg)                                                                
+        print(msg)   
         
     def setup(self) -> None:
         self.manual_mode = False
@@ -27,6 +37,9 @@ class ClientAutonomyApp (BaseApp):
 
     def run(self) -> None:
         # Read commands and telem
+        self.send_stepper_command()
+        time.sleep(5)
+
         if len(self.command_queue):
             pass
         if len(self.telemetry_queue):
