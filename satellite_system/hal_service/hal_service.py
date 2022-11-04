@@ -67,7 +67,6 @@ class HalService(BaseApp):
             self.start = time.time()
 
 
-
             message = proto.Message()
             telemetry = proto.Telemetry()
             propMass = proto.PropDepotTankPropMass()
