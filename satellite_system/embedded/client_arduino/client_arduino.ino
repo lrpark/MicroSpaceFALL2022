@@ -33,10 +33,33 @@ Adafruit_LIS3MDL lis3mdl;
 #define LIS3MDL_MOSI 11
 #define LIS3MDL_CS 10
 
+
+/////  STEPPER SETUP ////////
+/*
+This is a test sketch for the Adafruit assembled Motor Shield for Arduino v2
+It won't work with v1.x motor shields! Only for the v2's with built in PWM
+control
+
+For use with the Adafruit Motor Shield v2
+---->  http://www.adafruit.com/products/1438
+*/
+
+#include <Adafruit_MotorShield.h>
+
+// Create the motor shield object with the default I2C address
+Adafruit_MotorShield AFMS = Adafruit_MotorShield();
+// Or, create it with a different I2C address (say for stacking)
+// Adafruit_MotorShield AFMS = Adafruit_MotorShield(0x61);
+
+// Connect a stepper motor with 200 steps per revolution (1.8 degree)
+// to motor port #2 (M3 and M4)
+Adafruit_StepperMotor *myMotor = AFMS.getStepper(200, 2);
+/////////////////////////////////////////
+
 double client_mag_meas_X;
 double client_mag_meas_Y;
 double client_mag_meas_Z;
-
+double stepDeg;
 
 void setup() {
   Serial.begin(115200);
@@ -59,7 +82,11 @@ void setup() {
 
 //////////////// MAG SETUP ///////////////////////////
   magnetometerSetup();
-///////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+
+//////////////// STEPPER SETUP ///////////////////////
+  stepperSetup();
+//////////////////////////////////////////////////////
 
 }
 
@@ -119,6 +146,19 @@ void readSensors() {
 void sendActuatorCommands() {
 
  ////////// Actuator command code ////////////
+  // int stepDeg = 360;
+  int steps = stepDeg/1.7; 
+
+  Serial.println("Single coil steps");
+  if (steps < 0) {
+    myMotor->step(abs(steps), BACKWARD, SINGLE);  
+  }
+  else {
+    myMotor->step(steps, FORWARD, SINGLE);
+  }
+  
+
+  delay(1000);  
 
 
  /////////////////////////////////////////////
@@ -174,6 +214,8 @@ void receiveCommandsFromPi() {
 
  if (Serial.available() > 0) {
     String data = Serial.readStringUntil('\n');
+
+    stepDeg = getValue(data, ',', 1).toFloat();
     Serial.print("You sent me: ");
     Serial.println(data);
   }
@@ -248,6 +290,34 @@ void magnetometerSetup() {
                             true); // enabled!
 
 
+}
+
+void stepperSetup() {
+
+  if (!AFMS.begin()) {         // create with the default frequency 1.6KHz
+  // if (!AFMS.begin(1000)) {  // OR with a different frequency, say 1KHz
+    Serial.println("Could not find Motor Shield. Check wiring.");
+    while (1);
+  }
+  Serial.println("Motor Shield found.");
+
+  myMotor->setSpeed(10);  // 10 rpm
+}
+
+String getValue(String data, char separator, int index)
+{
+    int found = 0;
+    int strIndex[] = { 0, -1 };
+    int maxIndex = data.length() - 1;
+
+    for (int i = 0; i <= maxIndex && found <= index; i++) {
+        if (data.charAt(i) == separator || i == maxIndex) {
+            found++;
+            strIndex[0] = strIndex[1] + 1;
+            strIndex[1] = (i == maxIndex) ? i+1 : i;
+        }
+    }
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
 
