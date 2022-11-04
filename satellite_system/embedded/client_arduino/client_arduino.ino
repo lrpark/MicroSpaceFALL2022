@@ -14,7 +14,7 @@
 // unsigned long currentTime;
 // unsigned long cloopTime;
 
-// String serial_in;
+String serial_in;
 
 // HX711 scale;
 
@@ -85,7 +85,7 @@ void setup() {
 //////////////////////////////////////////////////////
 
 //////////////// STEPPER SETUP ///////////////////////
-  stepperSetup();
+  // stepperSetup();
 //////////////////////////////////////////////////////
 
 }
@@ -212,15 +212,37 @@ void sendMeasurementsToPi() {
 
 void receiveCommandsFromPi() {
 
+ Serial.println("About to see if serial available");
  if (Serial.available() > 0) {
-    String data = Serial.readStringUntil('\n');
+    // String data = Serial.readStringUntil('\n');
 
-    stepDeg = getValue(data, ',', 1).toFloat();
-    Serial.print("You sent me: ");
-    Serial.println(data);
+    // stepDeg = getValue(data, ',', 1).toFloat();
+    // Serial.print("You sent me: ");
+    // Serial.println(data);
+
+    serial_in = Serial.readString();
+    Serial.println("About to send runCommand");
+    runCommand(serial_in);
+
+
+
   }
 }
 
+void runCommand(String serial)
+{
+
+  uint8_t cmd = serial.substring(0,1).toInt();
+  String args = serial.substring(2); 
+  if (cmd == 1)
+  {
+    uint8_t stepper_pos = args.substring(0,3).toInt();
+    Serial.println("Received command in Arduino, yay");
+
+
+  }  
+
+}
 
 
 void magnetometerSetup() {
