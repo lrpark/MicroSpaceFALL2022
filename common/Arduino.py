@@ -31,13 +31,35 @@ class Arduino():
         serial = serial_buf.split(',')
         msg = proto.Message()
         tlm = proto.Telemetry()
-        if serial[0] == '0':  # Temperature reading
-            data = proto.TemperatureData()
-            data.sensor_id = int(serial[1])
-            data.sensor_value = float(serial[2])
-            tlm.temperature_data.CopyFrom(data)
-        if serial[1] == '1':
-            pass
+
+        # if serial[0] == '0':  # Temperature reading
+        #     data = proto.TemperatureData()
+        #     data.sensor_id = int(serial[1])
+        #     data.sensor_value = float(serial[2])
+        #     tlm.temperature_data.CopyFrom(data)
+        if serial[0] == '1':  # Client Magnetometer
+            data = proto.GncClientMagnetic()
+            data.x = float(serial[1])
+            data.y = float(serial[2])
+            data.z = float(serial[3])
+            tlm.gnc_client_magnetic.CopyFrom(data)
+        if serial[0] == '2':  # Depot Magnetometer
+            data = proto.GncDepotMagnetic()
+            data.x = float(serial[1])
+            data.y = float(serial[2])
+            data.z = float(serial[3])
+            tlm.gnc_depot_magnetic.CopyFrom(data)
+
+        if serial[0] == '10':  # Client Mass [kg]
+            data = proto.PropClientTankPropMass()
+            data.depot_prop_mass = float(serial[1])
+            tlm.client_prop_mass.CopyFrom(data)
+        
+        if serial[1] == '11':  # Depot Mass [kg]
+            data = proto.PropDepotTankPropMass()
+            data.client_prop_mass = float(serial[1])
+            tlm.depot_prop_mass.CopyFrom(data)
+
         msg.telemetry.CopyFrom(tlm)
 
         return msg
@@ -57,5 +79,6 @@ class Arduino():
         while True:
             while self.conn.in_waiting:
                 serial_buf = self.conn.readline().decode('utf-8').rstrip()
+                print(serial_buf)
                 msg = self.translate_serial_to_proto(serial_buf)
                 self.messages.append(msg)

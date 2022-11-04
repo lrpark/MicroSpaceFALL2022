@@ -24,68 +24,76 @@ message Message {
 //          WATERLILY Command Messages Here
 //---------------------------------------------
 
-message commsDepotClientHeartBeat {
+message CommsDepotClientHeartBeat {
     optional bool is_alive = 1;
 }
-message commsDepotArduinoReset {
+message CommsDepotArduinoReset {
     optional bool is_reset = 1;
 }
-message commsClientArduinoReset {
+message CommsClientArduinoReset {
     optional bool is_reset = 1;
 }
-message depotClientOpenFillValve {
+message DepotClientOpenFillValve {
     optional bool is_open = 1;
 }
-message clientDepotStopFill {
+message ClientDepotStopFill {
     optional bool is_stop_fill = 1;
 }
-message clientDepotReadyForMate {
+message ClientDepotReadyForMate {
     optional bool is_ready = 1;
+}
+message PropFillLevel {
+    optional double level = 1;
 }
 message depotClientReadyForMate {
     optional bool is_ready = 1;
 }
-message depotClientSeparate {
+message DepotClientSeparate {
     optional bool is_separate = 1;
 }
 
 //---------------------------------------------
 //          WATERLILY Telemetry Messages Here
 //---------------------------------------------
-message propDepotTankPropMass {
+message PropDepotTankPropMass {
+    optional double depot_prop_mass = 1;
+}
+message PropClientTankPropMass {
+    optional double client_prop_mass = 1;
+}
+message PropClientTankPropMass2Test {
     optional double prop_mass = 1;
 }
-message propClientTankPropMass {
-    optional double prop_mass = 1;
-}
-message propDepotFillValveIsOpen {
+message PropDepotFillValveIsOpen {
     optional bool is_open = 1;
 }
-message gncDepotMagnetic {
+message GncDepotMagnetic {
     optional double x = 1;
     optional double y = 2;
+    optional double z = 3;
 }
-message gncClientMagnetic {
+message GncClientMagnetic {
     optional double x = 1;
     optional double y = 2;
+    optional double z = 3;
 }
-message gncClientRotationCommand {
+message GncClientRotationCommand {
     optional int32 command = 1;
 }
-message dockingDepotClientAreAttached {
+message DockingDepotClientAreAttached {
     optional bool are_attached = 1;
 }
-message dockingDepotConnectionVoltage {
+message DockingDepotConnectionVoltage {
     optional double connection_voltage = 1;
 }
-message dockingClientConnectionVoltage {
+message DockingClientConnectionVoltage {
     optional double connection_voltage = 1;
 }
-message cdhClient {
+message CdhClient {
     optional bool is_running = 1;
     optional bool is_healthy = 2;
 }
-message cdhDepot {
+message CdhDepot {
     optional bool is_running = 1;
     optional bool is_healthy = 2;
 }
@@ -121,8 +129,15 @@ message SetAutonomyState {
 //          Telemetry Messages Here
 //---------------------------------------------
 message Telemetry {
+
     optional TemperatureData temperature_data = 1;
     optional FanSpeedData fan_speed_reading = 2;
+    optional PropFillLevel level = 3;
+    optional PropClientTankPropMass client_prop_mass = 4;
+    optional PropDepotTankPropMass depot_prop_mass = 5;
+    optional GncClientMagnetic gnc_client_magnetic = 6;
+    optional GncDepotMagnetic gnc_depot_magnetic = 7;
+   
 }
 
 message TemperatureData {

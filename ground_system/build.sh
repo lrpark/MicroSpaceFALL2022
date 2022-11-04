@@ -6,8 +6,6 @@ set -o pipefail
 # Build the critical infrastructure (i.e. any service)
 cd ./main_service/
 ./build.sh
-cd ../hal_service/
-./build.sh
 cd ../logger_service/
 ./build.sh
 cd ../sdr_app/

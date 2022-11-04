@@ -1,3 +1,7 @@
+String serial_in;
+
+// Global temp variables
+
 void setup() {
   Serial.begin(115200);
 }
@@ -43,7 +47,47 @@ void sendActuatorCommands() {
 }
 
 void sendMeasurementsToPi() {
-  Serial.println("Measurement from Arduino\n");
+  // Serial.println("Measurement from Arduino\n");
+
+  
+  /////////// ALIGNMENT SUBSYSTEM ///////////////////
+
+  // 1 = client magnetometer
+  // 2 = depot magnetometer
+
+  double client_mag_meas_X = 0.02;
+  double client_mag_meas_Y = 0.04;
+  double client_mag_meas_Z = 0.06;
+  
+  String serial_data = "1," + String(client_mag_meas_X) + "," + String(client_mag_meas_Y) + "," + String(client_mag_meas_Z);
+  Serial.println(serial_data);
+  
+
+  double depot_mag_meas_X = 0.03;
+  double depot_mag_meas_Y = 0.05;
+  double depot_mag_meas_Z = 0.07;
+
+  serial_data = "2," + String(depot_mag_meas_X) + "," + String(depot_mag_meas_X) + "," + String(depot_mag_meas_X);
+  Serial.println(serial_data);
+  
+
+
+
+  //////////////////////////////////////////////////
+
+  //////////// PROPULSION SUBSYSTEM ////////////////
+
+  // 11 = client scale mass
+  // 12 = depot scale mass
+
+
+
+
+
+  /////////////////////////////////////////////////
+
+
+
   delay(50);
 }
 

@@ -72,13 +72,13 @@ class TCPClient():
 
 # Under construction - doesn't seem to work
 if __name__ == "__main__": # runs for testing only and by running TCPClient.py directly (i.e, >> pythonTCPClient.py)
-    client = TCPClient(ip="192.168.1.160", port=5051, sender="autonomy") # Use IP address and port of the TCPServer (on Ground System)
+    client = TCPClient(ip="192.168.1.40", port=5051, sender="satellite_system_sdr") # Use IP address and port of the TCPServer (on Ground System)
     client.connect()
     msg = message_pb2.Message()
-    client.send(msg=msg, dst="hal")
+    client.send(msg=msg, dst="all")
     while client.active:
         messages = client.get_messages()
         for msg in messages:
             print(f"Received: {msg}")
             time.sleep(2)
-            client.send(client.disconnect_msg, dst="hal")
+            client.send(client.disconnect_msg, dst="all")
