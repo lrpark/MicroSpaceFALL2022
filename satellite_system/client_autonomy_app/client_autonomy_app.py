@@ -20,6 +20,7 @@ class ClientAutonomyApp (BaseApp):
         for msg in self.command_queue:
             if msg.HasField("command"):
                 if msg.command.HasField("refuel"):
+                    is_refuel = msg.command.refuel.refuel
                     print("Initiate Refuel") 
 
     def read_propMass(self):
