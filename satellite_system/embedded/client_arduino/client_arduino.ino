@@ -78,7 +78,7 @@ void setup() {
 /////////////////////////////////////////
 
 //////////////// MAG SETUP ///////////////////////////
-  // magnetometerSetup();
+  magnetometerSetup();
 //////////////////////////////////////////////////////
 
 //////////////// STEPPER SETUP ///////////////////////
@@ -112,7 +112,7 @@ void readSensors() {
 
   ////////// Sensor reading code ////////////
 
-  // readMagnetometer();
+  readMagnetometer();
 
   delay(100); 
 
@@ -161,6 +161,7 @@ void sendMeasurementsToPi() {
   
   String serial_data = "1," + String(client_mag_meas_X) + "," + String(client_mag_meas_Y) + "," + String(client_mag_meas_Z);
   Serial.println(serial_data);
+  delay(5);
   
 
   //////////////////////////////////////////////////
@@ -168,7 +169,7 @@ void sendMeasurementsToPi() {
   //////////// PROPULSION SUBSYSTEM ////////////////
 
   // 11 = client scale mass
-  String serial_data = "11," + String(clientScaleMass);
+  serial_data = "11," + String(clientScaleMass);
   Serial.println(serial_data);
 
 
@@ -357,6 +358,8 @@ void readScale()
   Serial.print(scale.get_units(), 1); //scale.get_units() returns a float
   Serial.print(" lbs"); //You can change this to kg but you'll need to refactor the calibration_factor
   Serial.println();
+  clientScaleMass = scale.get_units();
+
   // //Flowrate stuff
   // currentTime = millis();
   //  // Every second, calculate and print litres/hour
