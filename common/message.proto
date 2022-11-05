@@ -48,6 +48,11 @@ message PropFillLevel {
 message depotClientReadyForMate {
     optional bool is_ready = 1;
 }
+
+message groundClientInitiateRefuel {
+    optional bool refuel = 1;
+}
+
 message DepotClientSeparate {
     optional bool is_separate = 1;
 }
@@ -113,6 +118,7 @@ message Command {
     
     // WATERLILY
     optional ClientStepperCommand set_stepper_command = 5;
+    optional groundClientInitiateRefuel refuel = 6;
 
 
 
