@@ -35,8 +35,10 @@ class ClientAutonomyApp (BaseApp):
     def send_stepper_command(self):                            
         msg = proto.Message()                                
         cmd = proto.Command()                                  
-        step_command= proto.ClientStepperCommand()                  
-        step_command.pos_deg = 30.0                 
+        step_command= proto.ClientStepperCommand()        
+
+        # Simply align with Y as a test          
+        step_command.pos_deg = self.client_magnetic_y               
         cmd.set_stepper_command.CopyFrom(step_command)            
         msg.command.CopyFrom(cmd)                             
         self.send_command(msg)                                                                
