@@ -61,6 +61,8 @@ double client_mag_meas_Y;
 double client_mag_meas_Z;
 double clientScaleMass;
 double stepDeg;
+double integratedDeg;
+double SAFE_CONDITION = 350.0; // deg
 
 void setup() {
   Serial.begin(115200);
@@ -82,7 +84,8 @@ void setup() {
 //////////////////////////////////////////////////////
 
 //////////////// STEPPER SETUP ///////////////////////
-  // stepperSetup();
+  stepperSetup();
+  integratedDeg = 0.0;
 //////////////////////////////////////////////////////
 
 //////////////// SCALE SETUP ///////////////////////
@@ -130,16 +133,24 @@ void sendActuatorCommands() {
  ////////// Actuator command code ////////////
   // int stepDeg = 360;
 
-  int steps = stepDeg/1.7; 
+  // Integrate rotation to make sure we stay within safe limit 
+  integratedDeg = integratedDeg + stepDeg;
+  if ((integratedDeg < SAFE_CONDITION) && (integratedDeg > -SAFE_CONDITION)){
 
-  // Serial.println("Single coil steps");
-  if (steps < 0) {
-    myMotor->step(abs(steps), BACKWARD, SINGLE);  
+    int steps = stepDeg/1.7; 
+
+    // Serial.println("Single coil steps");
+    if (steps < 0) {
+      myMotor->step(abs(steps), BACKWARD, SINGLE);  
+    }
+    else {
+      myMotor->step(steps, FORWARD, SINGLE);
+    }
   }
   else {
-    myMotor->step(steps, FORWARD, SINGLE);
+    Serial.println("Outside safe condition!");
   }
-  
+
 
   delay(1000);  
 
@@ -171,10 +182,6 @@ void sendMeasurementsToPi() {
   // 11 = client scale mass
   serial_data = "11," + String(clientScaleMass);
   Serial.println(serial_data);
-
-
-
-
 
   /////////////////////////////////////////////////
 
