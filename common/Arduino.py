@@ -70,7 +70,7 @@ class Arduino():
 
     def __connect(self) -> None:
         self.conn = serial.Serial(port=self.port, baudrate=self.baudrate, timeout=1)
-        time.sleep(0.25)
+        time.sleep(1.0)
         receiver = threading.Thread(target=self.__receive)
         receiver.start()
 
