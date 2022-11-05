@@ -14,6 +14,7 @@ class ClientAutonomyApp (BaseApp):
         self.client_magnetic_x = 0.0
         self.client_magnetic_y = 0.0
         self.client_magnetic_z = 0.0
+        self.is_initiate = False
         super().__init__("vehicle.depot_autonomy_app")
 
     def initiate_refuel(self): 
@@ -22,6 +23,7 @@ class ClientAutonomyApp (BaseApp):
                 if msg.command.HasField("refuel"):
                     is_refuel = msg.command.refuel.refuel
                     print("Initiate Refuel") 
+                    self.initiate_refuel = True
 
     def read_propMass(self):
         for msg in self.telemetry_queue:
@@ -57,7 +59,9 @@ class ClientAutonomyApp (BaseApp):
 
     def run(self) -> None:
         # Read commands and telem
-        self.send_stepper_command()
+        if (self.is_initiate == True):
+            self.send_stepper_command()
+            
         time.sleep(1.0)
 
         if len(self.command_queue):
