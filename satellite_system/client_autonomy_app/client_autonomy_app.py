@@ -23,7 +23,7 @@ class ClientAutonomyApp (BaseApp):
                 if msg.command.HasField("refuel"):
                     is_refuel = msg.command.refuel.refuel
                     print("Initiate Refuel") 
-                    self.initiate_refuel = True
+                    self.is_initiate = True
 
     def read_propMass(self):
         for msg in self.telemetry_queue:
@@ -61,7 +61,6 @@ class ClientAutonomyApp (BaseApp):
         # Read commands and telem
         if (self.is_initiate == True):
             self.send_stepper_command()
-            
         time.sleep(1.0)
 
         if len(self.command_queue):
