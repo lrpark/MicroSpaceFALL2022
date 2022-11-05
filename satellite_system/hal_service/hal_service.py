@@ -7,6 +7,7 @@ import message_pb2 as proto
 import queue
 import serial
 import time
+import sys
 
 """
 Purpose: This app is supposed to expose/emulate much of the hardware functions to the applications running
@@ -74,6 +75,31 @@ class HalService(BaseApp):
             propMass.depot_prop_mass = 3.0
             telemetry.depot_prop_mass.CopyFrom(propMass)
             message.telemetry.CopyFrom(telemetry)
+
+        # Demo - send dummy prop mass telemetry
+        if len(sys.argv) > 1:
+            if (sys.argv[1]) == '-demoClient':
+                if (time.time() - self.start) > 2:
+                    message = proto.Message()
+                    telemetry = proto.Telemetry()
+                    propClientTankPropMass = proto.propClientTankPropMass()
+                    propClientTankPropMass.client_prop_mass = 4
+                    telemetry.client_prop_mass.CopyFrom(propClientTankPropMass)
+                    message.telemetry.CopyFrom(telemetry)
+                    self.send_telemetry(message)
+                    self.start = time.time()
+
+        if len(sys.argv) > 1:
+            if (sys.argv[1]) == '-demoDepot':
+                if (time.time() - self.start) > 2:
+                    message = proto.Message()
+                    telemetry = proto.Telemetry()
+                    propDepotTankPropMass = proto.propDepotTankPropMass()
+                    propDepotTankPropMass.depot_prop_mass = 4
+                    telemetry.depot_prop_mass.CopyFrom(propDepotTankPropMass)
+                    message.telemetry.CopyFrom(telemetry)
+                    self.send_telemetry(message)
+                    self.start = time.time()
 
     def shutdown(self):
         pass

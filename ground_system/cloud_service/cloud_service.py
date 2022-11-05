@@ -9,6 +9,8 @@ import threading
 import datetime
 import time
 
+counter_downlink_id = 1
+
 
 class CloudService(BaseApp):
     def __init__(self) -> None:
@@ -26,13 +28,19 @@ class CloudService(BaseApp):
         )
         return response
 
-    def put(self, Sensor_Id='' , Temperature='' , Date='' , Time=''):
+    #def put(self, Downlink_Msg_ID='' , Sensor_Id='' , Temperature='' , Date='' , Time=''):
+    def put(self, Downlink_Msg_ID='' , Sensor_Id='' , client_prop_mass='' , depot_prop_mass='' , EpochTime='', Date='' , Time=''):
+        global counter_downlink_id
+
         self.telem_table.put_item(
             Item={
+                'Downlink_Msg_ID':counter_downlink_id,
                 'Sensor_Id':Sensor_Id,
-                'Temperature':Temperature,
+                'client_prop_mass':client_prop_mass,
+                'depot_prop_mass':depot_prop_mass,
                 'Date' :Date,
-                'Time' :Time
+                'Time' :Time,
+                'EpochTime' :EpochTime
             }
         )
 
@@ -50,14 +58,21 @@ class CloudService(BaseApp):
         return response
 
     def push_to_cloud(self, msg: proto.Message):
-        id = msg.telemetry.temperature_data.sensor_id
-        temp = msg.telemetry.temperature_data.sensor_value
+        global counter_downlink_id
+
+        #id = msg.telemetry.temperature_data.sensor_id
+        #temp = msg.telemetry.temperature_data.sensor_value
+        #id = msg.telemetry.client_prop_mass.sensor_id
+        cmass = msg.telemetry.client_prop_mass.client_prop_mass
+        dmass = msg.telemetry.depot_prop_mass.depot_prop_mass
         now = datetime.datetime.now()
         date=now.strftime('%Y-%m-%d')
         ctime=now.strftime('%H:%M:%S %Z')
+        etime = int(time.time()) # using epoch time to sort telemetry in web app, this replaces the date and time columns
         if self.config_params.connect_to_telemetry_database:
-            self.put(Sensor_Id=str(id), Temperature=str(temp), Date=str(date), Time=str(ctime))
-        print(f"Uploaded Sample on Cloud Id:{id} T:{temp} D:{date} T:{ctime}")
+            self.put(Downlink_Msg_ID=str(counter_downlink_id), Sensor_Id=str(id), client_prop_mass=str(cmass), depot_prop_mass=str(dmass), EpochTime=str(etime), Date=str(date), Time=str(ctime))
+        counter_downlink_id = counter_downlink_id + 1
+        print(f"Uploaded Sample on Cloud Id:{id} ClientPropMass:{cmass} DepotPropMass:{dmass} EpochTime:{etime} D:{date} T:{ctime}")
 
     def setup(self):
         if self.config_params.connect_to_command_database:
@@ -112,6 +127,7 @@ class CloudService(BaseApp):
         if len(self.telemetry_queue):
             for msg in self.telemetry_queue:
                 if msg.HasField("telemetry"):
+                    print("[Cloud_service] Received telemetry, pushing to cloud...")
                     self.push_to_cloud(msg)
 
         commands = self.get_commands()
