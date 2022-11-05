@@ -5,6 +5,7 @@ from BaseApp import BaseApp
 import message_pb2 as proto
 import time
 import statistics
+import math
 
 
 class DepotAutonomyApp (BaseApp):
@@ -29,6 +30,18 @@ class DepotAutonomyApp (BaseApp):
                     self.depot_magnetic_y = msg.telemetry.gnc_depot_magnetic.y
                     self.depot_magnetic_z = msg.telemetry.gnc_depot_magnetic.z
                     print(self.depot_magnetic_x)
+
+    def send_stepper_command(self):                            
+        msg = proto.Message()                                
+        cmd = proto.Command()                                  
+        step_command= proto.ClientStepperCommand()        
+
+        step_command.pos_deg = 90 - math.atan2(self.client_magnetic_y, self.client_magnetic_x) * 180/math.pi
+
+        cmd.set_stepper_command.CopyFrom(step_command)            
+        msg.command.CopyFrom(cmd)                             
+        self.send_command(msg)                                                                
+        print(msg)   
         
     
     def setup(self) -> None:
