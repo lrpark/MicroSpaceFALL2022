@@ -19,8 +19,16 @@ class DepotAutonomyApp (BaseApp):
             if msg.HasField("telemetry"):
                 if msg.telemetry.HasField("depot_prop_mass"):
                     depot_prop_mass = msg.telemetry.depot_prop_mass.depot_prop_mass
-                    depot_prop_mass = depot_prop_mass + 1.1111
                     print(depot_prop_mass)
+
+    def read_magnetic(self):
+        for msg in self.telemetry_queue:
+            if msg.HasField("telemetry"):
+                if msg.telemetry.HasField("gnc_depot_magnetic"):
+                    self.depot_magnetic_x = msg.telemetry.gnc_depot_magnetic.x
+                    self.depot_magnetic_y = msg.telemetry.gnc_depot_magnetic.y
+                    self.depot_magnetic_z = msg.telemetry.gnc_depot_magnetic.z
+                    print(self.depot_magnetic_x)
         
     
     def setup(self) -> None:
@@ -29,10 +37,14 @@ class DepotAutonomyApp (BaseApp):
 
     def run(self) -> None:
         # Read commands and telem
+        self.send_stepper_command()
+        time.sleep(1.0)
+
         if len(self.command_queue):
             pass
         if len(self.telemetry_queue):
             self.read_propMass()
+            self.read_magnetic()
 
 if __name__ == "__main__":
     a= DepotAutonomyApp()
