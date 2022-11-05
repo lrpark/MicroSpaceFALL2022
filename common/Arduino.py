@@ -54,10 +54,10 @@ class Arduino():
             data.z = float(serial[3])
             tlm.gnc_depot_magnetic.CopyFrom(data)
 
-        # if serial[0] == '10':  # Client Mass [kg]
-        #     data = proto.PropClientTankPropMass()
-        #     data.depot_prop_mass = float(serial[1])
-        #     tlm.client_prop_mass.CopyFrom(data)
+        if serial[0] == '11':  # Client Mass [kg]
+            data = proto.PropClientTankPropMass()
+            data.depot_prop_mass = float(serial[1])
+            tlm.client_prop_mass.CopyFrom(data)
         
         # if serial[1] == '11':  # Depot Mass [kg]
         #     data = proto.PropDepotTankPropMass()
