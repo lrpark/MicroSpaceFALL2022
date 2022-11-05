@@ -6,13 +6,13 @@
   emulate_thermal: false  # Should the thermal system be emulated
   telemetry_freq: 0.20     # Hz (always keep to two decimal places e.g. #.##)
 
-  command_multicast_ip: "224.1.1.10"
+  command_multicast_ip: "224.1.1.11"
   command_multicast_port: 5050
-  telemetry_multicast_ip: "224.1.1.20"
+  telemetry_multicast_ip: "224.1.1.21"
   telemetry_multicast_port: 5060
 
   # ---- sdr_app ----
-  sdr_tcp_client_ip: "192.168.1.160" # modify to match the IP address of Ground System
+  sdr_tcp_client_ip: "172.20.10.6" # modify to match the IP address of Ground System
   sdr_tcp_client_port: 5005
 
   # ---- hal_service ----

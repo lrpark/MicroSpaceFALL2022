@@ -95,10 +95,14 @@ class CloudService(BaseApp):
         print(command)
         msg = proto.Message()
         cmd = proto.Command()
-        if "Autonomy_status" in command.keys():
-            scmd = proto.SetAutonomyState()
-            scmd.autonomy_state = bool(int(command["Autonomy_status"]))
-            cmd.set_autonomy_state.CopyFrom(scmd)
+        #if "Autonomy_status" in command.keys():
+        #    scmd = proto.SetAutonomyState()
+        #    scmd.autonomy_state = bool(int(command["Autonomy_status"]))
+        #    cmd.set_autonomy_state.CopyFrom(scmd)
+        if "Initiate_Refuel" in command.keys():
+            scmd = proto.groundClientInitiateRefuel()
+            scmd.refuel = bool(int(command["Initiate_Refuel"]))
+            cmd.refuel.CopyFrom(scmd)
             msg.command.CopyFrom(cmd)
             print(msg)
             self.send_command(msg)

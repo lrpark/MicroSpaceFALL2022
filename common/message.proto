@@ -23,23 +23,25 @@ message Message {
 //---------------------------------------------
 //          WATERLILY Command Messages Here
 //---------------------------------------------
-
-message CommsDepotClientHeartBeat {
+message dockingClientReadyForFill {
+    optional bool is_ready = 1;
+}
+message commsDepotClientHeartBeat {
     optional bool is_alive = 1;
 }
-message CommsDepotArduinoReset {
+message commsDepotArduinoReset {
     optional bool is_reset = 1;
 }
-message CommsClientArduinoReset {
+message commsClientArduinoReset {
     optional bool is_reset = 1;
 }
-message DepotClientOpenFillValve {
+message depotClientOpenFillValve {
     optional bool is_open = 1;
 }
-message ClientDepotStopFill {
+message clientDepotStopFill {
     optional bool is_stop_fill = 1;
 }
-message ClientDepotReadyForMate {
+message clientDepotReadyForMate {
     optional bool is_ready = 1;
 }
 message PropFillLevel {
@@ -48,55 +50,54 @@ message PropFillLevel {
 message depotClientReadyForMate {
     optional bool is_ready = 1;
 }
-message DepotClientSeparate {
+message depotClientSeparate {
     optional bool is_separate = 1;
 }
-message ClientStepperCommand {
-    optional double pos_deg = 1;
+message groundClientInitiateRefuel {
+    optional bool refuel = 1;
 }
+message groundClientEmergencyOff {
+    optional bool emergency = 1;
+}
+
 
 //---------------------------------------------
 //          WATERLILY Telemetry Messages Here
 //---------------------------------------------
-message PropDepotTankPropMass {
+message propDepotTankPropMass {
     optional double depot_prop_mass = 1;
 }
-message PropClientTankPropMass {
+message propClientTankPropMass {
     optional double client_prop_mass = 1;
 }
-message PropClientTankPropMass2Test {
-    optional double prop_mass = 1;
-}
-message PropDepotFillValveIsOpen {
+message propDepotFillValveIsOpen {
     optional bool is_open = 1;
 }
-message GncDepotMagnetic {
+message gncDepotMagnetic {
     optional double x = 1;
     optional double y = 2;
-    optional double z = 3;
 }
-message GncClientMagnetic {
+message gncClientMagnetic {
     optional double x = 1;
     optional double y = 2;
-    optional double z = 3;
 }
-message GncClientRotationCommand {
+message gncClientRotationCommand {
     optional int32 command = 1;
 }
-message DockingDepotClientAreAttached {
+message dockingDepotClientAreAttached {
     optional bool are_attached = 1;
 }
-message DockingDepotConnectionVoltage {
+message dockingDepotConnectionVoltage {
     optional double connection_voltage = 1;
 }
-message DockingClientConnectionVoltage {
+message dockingClientConnectionVoltage {
     optional double connection_voltage = 1;
 }
-message CdhClient {
+message cdhClient {
     optional bool is_running = 1;
     optional bool is_healthy = 2;
 }
-message CdhDepot {
+message cdhDepot {
     optional bool is_running = 1;
     optional bool is_healthy = 2;
 }
@@ -110,12 +111,8 @@ message Command {
     optional SetFanSpeed set_fan_speed = 2;
     optional SetFanState set_fan_state = 3;
     optional SetAutonomyState set_autonomy_state = 4;
-    
-    // WATERLILY
-    optional ClientStepperCommand set_stepper_command = 5;
-
-
-
+    optional groundClientInitiateRefuel refuel = 5;
+    optional groundClientEmergencyOff emergency = 6;
 }
 
 message SetServoPosition {
@@ -138,17 +135,12 @@ message SetAutonomyState {
 //          Telemetry Messages Here
 //---------------------------------------------
 message Telemetry {
-
     optional TemperatureData temperature_data = 1;
     optional FanSpeedData fan_speed_reading = 2;
     optional PropFillLevel level = 3;
-    optional PropClientTankPropMass client_prop_mass = 4;
-    optional PropDepotTankPropMass depot_prop_mass = 5;
-    optional GncClientMagnetic gnc_client_magnetic = 6;
-    optional GncDepotMagnetic gnc_depot_magnetic = 7;
-
+    optional propDepotTankPropMass depot_prop_mass = 4;
+    optional propClientTankPropMass client_prop_mass = 5;
 }
-
 
 message TemperatureData {
     optional int32 sensor_id = 1;
