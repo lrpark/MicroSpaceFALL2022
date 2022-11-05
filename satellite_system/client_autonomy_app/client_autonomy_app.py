@@ -5,6 +5,7 @@ from BaseApp import BaseApp
 import message_pb2 as proto
 import time
 import statistics
+import math 
 
 
 class ClientAutonomyApp (BaseApp):
@@ -37,8 +38,8 @@ class ClientAutonomyApp (BaseApp):
         cmd = proto.Command()                                  
         step_command= proto.ClientStepperCommand()        
 
-        # Simply align with Y as a test          
-        step_command.pos_deg = self.client_magnetic_y               
+        step_command.pos_deg = 90 - math.atan2(self.client_magnetic_y, self.client_magnetic_x) * 180/math.pi
+
         cmd.set_stepper_command.CopyFrom(step_command)            
         msg.command.CopyFrom(cmd)                             
         self.send_command(msg)                                                                
