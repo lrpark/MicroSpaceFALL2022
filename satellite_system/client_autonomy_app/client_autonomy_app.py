@@ -7,8 +7,6 @@ import time
 import statistics
 import math 
 
-is_initiate = False
-
 class ClientAutonomyApp (BaseApp):
     def __init__(self) -> None:
         self.prop_data = dict()
@@ -24,7 +22,6 @@ class ClientAutonomyApp (BaseApp):
                 if msg.command.HasField("refuel"):
                     is_refuel = msg.command.refuel.refuel
                     print("Initiate Refuel") 
-                    is_initiate = True
 
     def read_propMass(self):
         for msg in self.telemetry_queue:
@@ -60,8 +57,7 @@ class ClientAutonomyApp (BaseApp):
 
     def run(self) -> None:
         # Read commands and telem
-        if (is_initiate == True):
-            self.send_stepper_command()
+        self.send_stepper_command()
         time.sleep(1.0)
 
         if len(self.command_queue):
