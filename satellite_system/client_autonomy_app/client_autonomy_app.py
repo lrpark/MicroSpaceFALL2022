@@ -16,10 +16,9 @@ class ClientAutonomyApp (BaseApp):
     def read_propMass(self):
         for msg in self.telemetry_queue:
             if msg.HasField("telemetry"):
-                if msg.telemetry.HasField("depot_prop_mass"):
-                    depot_prop_mass = msg.telemetry.depot_prop_mass.depot_prop_mass
-                    depot_prop_mass = depot_prop_mass + 1.1111
-                    print(depot_prop_mass)
+                if msg.telemetry.HasField("client_prop_mass"):
+                    client_prop_mass = msg.telemetry.client_prop_mass.client_prop_mass
+                    print(client_prop_mass)
     
     def send_stepper_command(self):                            
         msg = proto.Message()                                

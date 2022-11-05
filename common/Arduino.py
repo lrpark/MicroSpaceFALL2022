@@ -56,7 +56,7 @@ class Arduino():
 
         if serial[0] == '11':  # Client Mass [kg]
             data = proto.PropClientTankPropMass()
-            data.depot_prop_mass = float(serial[1])
+            data.client_prop_mass = float(serial[1])
             tlm.client_prop_mass.CopyFrom(data)
         
         # if serial[1] == '11':  # Depot Mass [kg]
