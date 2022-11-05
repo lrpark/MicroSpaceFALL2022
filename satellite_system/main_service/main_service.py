@@ -49,4 +49,4 @@ if __name__ == "__main__":
                 print(msg)
                 if msg.HasField("request_config"):
                     udp_client.send(config_msg, group=STARTUP_IP, port=STARTUP_PORT)
-        time.sleep(1)
+        time.sleep(0.25)
