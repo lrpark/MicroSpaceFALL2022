@@ -1,27 +1,27 @@
-// #include "HX711.h"
+#include "HX711.h"
 
-// #define calibration_factor 165000.0 //This value is obtained using the SparkFun_HX711_Calibration sketch
+#define calibration_factor 165000.0 //This value is obtained using the SparkFun_HX711_Calibration sketch
 
-// #define LOADCELL_DOUT_PIN  4
-// #define LOADCELL_SCK_PIN  3
-// #define fsrpin A0
-// int solPin = 4;
-// int flowPin=2;
-// double flowRate;
-// volatile int count;
+#define LOADCELL_DOUT_PIN  3
+#define LOADCELL_SCK_PIN  2
+#define fsrpin A0
+int solPin = 4;
+int flowPin=2;
+double flowRate;
+volatile int count;
 
-// int l_hour;
-// unsigned long currentTime;
-// unsigned long cloopTime;
+int l_hour;
+unsigned long currentTime;
+unsigned long cloopTime;
 
 String serial_in;
 
-// HX711 scale;
+HX711 scale;
 
-//   void Flow()
-//   {
-//     count++;
-//   }
+  void Flow()
+  {
+    count++;
+  }
 
 #include <Wire.h>
 #include <Adafruit_LIS3MDL.h>
@@ -59,6 +59,7 @@ Adafruit_StepperMotor *myMotor = AFMS.getStepper(200, 2);
 double client_mag_meas_X;
 double client_mag_meas_Y;
 double client_mag_meas_Z;
+double clientScaleMass;
 double stepDeg;
 
 void setup() {
@@ -73,23 +74,22 @@ void setup() {
   // sei();
   // currentTime=millis();
   // cloopTime=currentTime;
-  // // Scale stuff
-  // scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
-  // scale.set_scale(calibration_factor); //This value is obtained by using the SparkFun_HX711_Calibration sketch
-  // scale.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
-  // // Serial.println("Readings:");
+
 /////////////////////////////////////////
 
 //////////////// MAG SETUP ///////////////////////////
-  magnetometerSetup();
+  // magnetometerSetup();
 //////////////////////////////////////////////////////
 
 //////////////// STEPPER SETUP ///////////////////////
   // stepperSetup();
 //////////////////////////////////////////////////////
 
-}
+//////////////// SCALE SETUP ///////////////////////
+  scaleSetup();
+//////////////////////////////////////////////////////
 
+}
 
 void loop() {
   
@@ -112,29 +112,11 @@ void readSensors() {
 
   ////////// Sensor reading code ////////////
 
-    lis3mdl.read();      // get X Y and Z data at once
-    // Then print out the raw data
-    // Serial.print("\nX:  "); Serial.print(lis3mdl.x); 
-    // Serial.print("  \tY:  "); Serial.print(lis3mdl.y); 
-    // Serial.print("  \tZ:  "); Serial.println(lis3mdl.z); 
+  // readMagnetometer();
 
-    /* Or....get a new sensor event, normalized to uTesla */
-    sensors_event_t event; 
-    lis3mdl.getEvent(&event);
+  delay(100); 
 
-    client_mag_meas_X = (event.magnetic.x);
-    client_mag_meas_Y = (event.magnetic.y);
-    client_mag_meas_Z = (event.magnetic.z);
-
-    /* Display the results (magnetic field is measured in uTesla) */
-    // Serial.print("\tX: "); Serial.print(event.magnetic.x);
-    // Serial.print(" \tY: "); Serial.print(event.magnetic.y); 
-    // Serial.print(" \tZ: "); Serial.print(event.magnetic.z); 
-    // Serial.println(" uTesla ");
-
-    delay(100); 
-    // Serial.println();
-
+  readScale();
 
  /////////////////////////////////////////////
 
@@ -147,9 +129,10 @@ void sendActuatorCommands() {
 
  ////////// Actuator command code ////////////
   // int stepDeg = 360;
+
   int steps = stepDeg/1.7; 
 
-  Serial.println("Single coil steps");
+  // Serial.println("Single coil steps");
   if (steps < 0) {
     myMotor->step(abs(steps), BACKWARD, SINGLE);  
   }
@@ -175,28 +158,18 @@ void sendMeasurementsToPi() {
   /////////// ALIGNMENT SUBSYSTEM ///////////////////
 
   // 1 = client magnetometer
-  // 2 = depot magnetometer
   
   String serial_data = "1," + String(client_mag_meas_X) + "," + String(client_mag_meas_Y) + "," + String(client_mag_meas_Z);
   Serial.println(serial_data);
   
-
-  double depot_mag_meas_X = 0.03;
-  double depot_mag_meas_Y = 0.05;
-  double depot_mag_meas_Z = 0.07;
-
-  serial_data = "2," + String(depot_mag_meas_X) + "," + String(depot_mag_meas_X) + "," + String(depot_mag_meas_X);
-  Serial.println(serial_data);
-  
-
-
 
   //////////////////////////////////////////////////
 
   //////////// PROPULSION SUBSYSTEM ////////////////
 
   // 11 = client scale mass
-  // 12 = depot scale mass
+  String serial_data = "11," + String(clientScaleMass);
+  Serial.println(serial_data);
 
 
 
@@ -237,6 +210,7 @@ void runCommand(String serial)
   if (cmd == 1)
   {
     uint8_t stepper_pos = args.substring(0,3).toInt();
+    stepDeg = stepper_pos;
     Serial.println("Received command in Arduino, yay");
 
 
@@ -314,6 +288,40 @@ void magnetometerSetup() {
 
 }
 
+
+void readMagnetometer() {
+
+  lis3mdl.read();      // get X Y and Z data at once
+  // Then print out the raw data
+  // Serial.print("\nX:  "); Serial.print(lis3mdl.x); 
+  // Serial.print("  \tY:  "); Serial.print(lis3mdl.y); 
+  // Serial.print("  \tZ:  "); Serial.println(lis3mdl.z); 
+
+  /* Or....get a new sensor event, normalized to uTesla */
+  sensors_event_t event; 
+  lis3mdl.getEvent(&event);
+
+  client_mag_meas_X = (event.magnetic.x);
+  client_mag_meas_Y = (event.magnetic.y);
+  client_mag_meas_Z = (event.magnetic.z);
+
+  /* Display the results (magnetic field is measured in uTesla) */
+  // Serial.print("\tX: "); Serial.print(event.magnetic.x);
+  // Serial.print(" \tY: "); Serial.print(event.magnetic.y); 
+  // Serial.print(" \tZ: "); Serial.print(event.magnetic.z); 
+  // Serial.println(" uTesla ");
+
+}
+
+void scaleSetup() {
+
+  // Scale stuff
+  scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
+  scale.set_scale(calibration_factor); //This value is obtained by using the SparkFun_HX711_Calibration sketch
+  scale.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
+  Serial.println("Readings:");
+}
+
 void stepperSetup() {
 
   if (!AFMS.begin()) {         // create with the default frequency 1.6KHz
@@ -342,6 +350,24 @@ String getValue(String data, char separator, int index)
     return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
+void readScale() 
+{
 
+  Serial.print("Reading: ");
+  Serial.print(scale.get_units(), 1); //scale.get_units() returns a float
+  Serial.print(" lbs"); //You can change this to kg but you'll need to refactor the calibration_factor
+  Serial.println();
+  // //Flowrate stuff
+  // currentTime = millis();
+  //  // Every second, calculate and print litres/hour
+  //  if(currentTime >= (cloopTime + 1000))
+  //  {
+  //     cloopTime = currentTime; // Updates cloopTime
+  //     // Pulse frequency (Hz) = 7.5Q, Q is flow rate in L/min.
+  //     l_hour = (count * 60 / 7.5); // (Pulse frequency x 60 min) / 7.5Q = flowrate in L/hour
+  //     count = 0; // Reset Counter
+  //     Serial.print(l_hour, DEC); // Print litres/hour
+  //     Serial.println(" L/hour");
+  //  }
 
-
+}
