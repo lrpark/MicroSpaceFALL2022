@@ -51,7 +51,7 @@ class ClientAutonomyApp (BaseApp):
     def run(self) -> None:
         # Read commands and telem
         self.send_stepper_command()
-        time.sleep(0.1)
+        time.sleep(1.0)
 
         if len(self.command_queue):
             pass

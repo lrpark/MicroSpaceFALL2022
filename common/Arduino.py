@@ -77,7 +77,6 @@ class Arduino():
     def send_msg(self, msg: proto.Message) -> None:
         buf = self.translate_proto_to_serial(msg)
         if buf is not None:
-            print('We wrote bits to sent arduino')
             self.conn.write(bytes(buf, 'utf-8'))
 
     def __receive(self):
